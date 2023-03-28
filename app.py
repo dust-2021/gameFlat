@@ -9,10 +9,10 @@ def create_app() -> Flask:
     生成app实例，读取app配置，生成session，注册蓝图
     :return: app实例
     """
-    _app = Flask('app', __name__)
-    _app.config.from_pyfile('config/appConf/flask.conf.py')
+    _app = Flask(__name__, template_folder='./templates', static_folder='./static')
+    _app.config.from_pyfile('config/appConf/flaskConf.py')
     if os.path.exists('config/appConf/flaskPersonal.conf.py'):
-        _app.config.from_pyfile('config/appConf/flaskPersonal.conf.py')
+        _app.config.from_pyfile('config/appConf/flaskPersonalConf.py')
     session = Session()
     session.init_app(_app)
     _app.register_blueprint(mainApp, url_prefix='/')

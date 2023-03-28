@@ -14,6 +14,7 @@ REDIS_CONFIG = {
     'port': 6379,
     'password': None
 }
+
 MYSQL_CONF = {
     'host': '127.0.0.1',
     'port': 3306,
@@ -22,4 +23,6 @@ MYSQL_CONF = {
     'database': None,
     'mysql_engine': 'pymysql'
 }
+APP_ADMIN_PASSWORD = '064735'
+APP_ENV = 'development'
 
