@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import os
 from hashlib import md5
 
-if os.path.exists('config/appConfig/flaskPersonalConf.py'):
+if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import MYSQL_CONF, APP_ADMIN_PASSWORD
 else:
     from config.appConf.flaskConf import MYSQL_CONF, APP_ADMIN_PASSWORD
@@ -39,9 +39,11 @@ class UserPrivilege(_Base):
 
 
 _engine = create_engine(
-    f'mysql_{MYSQL_CONF.get("mysql_engine")}:{MYSQL_CONF.get("host", "127.0.0.1")}:{MYSQL_CONF.get("port", 3306)}/{MYSQL_CONF.get("database")}')
+    f'mysql+{MYSQL_CONF.get("mysql_engine")}://{MYSQL_CONF.get("username")}'
+    f':{MYSQL_CONF.get("password")}@{MYSQL_CONF.get("host", "127.0.0.1")}:'
+    f'{MYSQL_CONF.get("port", 3306)}/{MYSQL_CONF.get("database")}', pool_size=5)
 db_session = scoped_session(sessionmaker(_engine))
-_Base.metadata.creat_all()
+_Base.metadata.create_all(_engine)
 
 
 def initial_db():
@@ -51,3 +53,4 @@ def initial_db():
         admin = User(user_id=1, nickname='admin', passwordMD5=hasher.hexdigest())
         db_session.add(admin)
         db_session.commit()
+        db_session.close()

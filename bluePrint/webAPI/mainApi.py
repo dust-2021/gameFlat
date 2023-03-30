@@ -4,12 +4,18 @@ date: 2023/3/21 23:33
 """
 from flask import Blueprint
 from tools.doc.apiDoc import API_RETURN
-from flask import request, session, jsonify
+from flask import request, session, jsonify, render_template
+from db.mysqlDB import db_session
 
-mainApp = Blueprint('mainApp', __name__)
+main_api = Blueprint('main_api', __name__)
 
 
-@mainApp.route('/checkAlive')
+@main_api.route('/')
+def index():
+    return 'this is a flask website'
+
+
+@main_api.route('/checkAlive')
 def check_alive():
     res = API_RETURN.copy()
     res['MESSAGE'] = 'app is alive'
@@ -17,7 +23,7 @@ def check_alive():
     return jsonify(res)
 
 
-@mainApp.route('/requestRepeat', methods=['POST', 'GET'])
+@main_api.route('/requestRepeat', methods=['POST', 'GET'])
 def request_repeat():
     res = API_RETURN.copy()
     if request.method.upper() == 'POST':
