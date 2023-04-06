@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 import os
 from hashlib import md5
+import logging
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import MYSQL_CONF, APP_ADMIN_PASSWORD
@@ -38,6 +39,16 @@ class UserPrivilege(_Base):
     id = Column(BigInteger, autoincrement=True, primary_key=True)
 
 
+class ApiRequestCount(_Base):
+    __tablename__ = 'ApiRequestCount'
+
+    user_id = Column(BigInteger, index=True, default=None)
+    ip_address = Column(CHAR(20))
+    api_route = Column(VARCHAR(256))
+    times = Column(INTEGER)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
 _engine = create_engine(
     f'mysql+{MYSQL_CONF.get("mysql_engine")}://{MYSQL_CONF.get("username")}'
     f':{MYSQL_CONF.get("password")}@{MYSQL_CONF.get("host", "127.0.0.1")}:'
@@ -47,6 +58,7 @@ _Base.metadata.create_all(_engine)
 
 
 def initial_db():
+    # 初始管理员账号
     if not db_session.query(User.user_id).filter_by(user_id=1).first():
         hasher = md5(APP_ADMIN_PASSWORD.encode('utf-8'))
 
@@ -54,3 +66,6 @@ def initial_db():
         db_session.add(admin)
         db_session.commit()
         db_session.close()
+
+
+initial_db()

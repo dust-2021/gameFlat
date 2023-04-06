@@ -14,9 +14,11 @@ def create_app() -> Flask:
     _app = Flask(__name__, template_folder='./templates', static_folder='./static')
 
     log = logging.getLogger('base')
-    hd = logging.Handler('INFO')
-    hd.setFormatter(logging.Formatter('{name} {asctime}: {levelname} -- {message}', style='{'))
-    log.addHandler(hd)
+    std_handler = logging.StreamHandler()
+    file_handler = logging.FileHandler(filename='log/base_log.log', encoding='utf-8', mode='a+')
+    std_handler.setFormatter(logging.Formatter('{name} {asctime}: {levelname} -- {message}', style='{'))
+    log.addHandler(std_handler)
+    log.addHandler(file_handler)
 
     if os.path.exists('config/appConf/flaskPersonal.conf.py'):
         log.info('application start with default config.')
@@ -24,6 +26,7 @@ def create_app() -> Flask:
     else:
         log.info('application start with personal config.')
         _app.config.from_pyfile('config/appConf/flaskConf.py')
+
     session = Session()
     session.init_app(_app)
     _app.register_blueprint(main_api, url_prefix='/api')
