@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_session import Session
+
+import log
 from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
 import os
@@ -13,18 +15,13 @@ def create_app() -> Flask:
     """
     _app = Flask(__name__, template_folder='./templates', static_folder='./static')
 
-    log = logging.getLogger('base')
-    std_handler = logging.StreamHandler()
-    file_handler = logging.FileHandler(filename='log/base_log.log', encoding='utf-8', mode='a+')
-    std_handler.setFormatter(logging.Formatter('{name} {asctime}: {levelname} -- {message}', style='{'))
-    log.addHandler(std_handler)
-    log.addHandler(file_handler)
+    _log = logging.getLogger('base')
 
     if os.path.exists('config/appConf/flaskPersonal.conf.py'):
-        log.info('application start with default config.')
+        _log.info('application start with default config.')
         _app.config.from_pyfile('config/appConf/flaskPersonalConf.py')
     else:
-        log.info('application start with personal config.')
+        _log.info('application start with personal config.')
         _app.config.from_pyfile('config/appConf/flaskConf.py')
 
     session = Session()

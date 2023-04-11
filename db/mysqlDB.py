@@ -26,6 +26,8 @@ class User(_Base):
     nickname = Column(VARCHAR(32))
     user_age = Column(INTEGER)
     passwordMD5 = Column(CHAR(32))
+    lock_status = Column(INTEGER)
+    release_date = Column(DATETIME)
     id = Column(BigInteger, autoincrement=True, primary_key=True)
 
 

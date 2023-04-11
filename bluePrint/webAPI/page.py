@@ -9,4 +9,4 @@ page_app = Blueprint('page_app', __name__)
 
 @page_app.route('/')
 def index():
-    render_template('')
+    return render_template('base.html')

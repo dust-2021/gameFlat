@@ -1,4 +1,4 @@
 /venv
 /.idea
 /config/appConf/flaskPersonalConf.py
-/log/
+/log/*.log

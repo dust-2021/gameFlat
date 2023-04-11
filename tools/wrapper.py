@@ -2,11 +2,9 @@
 Author: li bo
 date: 2023/3/21 23:52
 """
-import sys
 from functools import wraps
 from flask import request, session, redirect
 from db.mysqlDB import db_session, ApiRequestCount
-from db.redisConn import redis_pool
 import os
 import logging
 
@@ -14,13 +12,6 @@ if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import API_PROTECT, API_MAX_REQUEST_TIME_PER_MINUTE
 else:
     from config.appConf.flaskConf import API_PROTECT, API_MAX_REQUEST_TIME_PER_MINUTE
-
-# 初始话函数日志对象
-log = logging.getLogger('funcLogger')
-handler = logging.FileHandler('log/func_log.log', mode='a+', encoding='utf-8')
-fmt = logging.Formatter('{name} {asctime}: {levelname} -- {message}', style='{')
-handler.setFormatter(fmt)
-log.addHandler(handler)
 
 
 def session_checker(func):
@@ -68,7 +59,8 @@ def set_period_request_count(num: int):
         @wraps(func)
         def wrapper(*args, **kwargs):
             _ip = request.headers.get('X-real-IP', request.remote_addr)
-            times = db_session.query(ApiRequestCount.times).filter(ip_address=_ip)
+
+            times = db_session.query(ApiRequestCount.times, ApiRequestCount.user_id).filter_by(ip_address=_ip).first()
 
             result = func(*args, **kwargs)
             return result
