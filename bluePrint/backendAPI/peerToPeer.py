@@ -6,7 +6,7 @@ from flask import request, session, Blueprint
 
 peer = Blueprint('peer', __name__)
 
-
+room = [f'room_{x}' for x in range(12)]
 @peer.route('/p2p/connect/<string:key>')
 def connect_peer(key):
     pass
