@@ -61,7 +61,8 @@ def set_period_request_count(num: int):
             _ip = request.headers.get('X-real-IP', request.remote_addr)
 
             times = db_session.query(ApiRequestCount.times, ApiRequestCount.user_id).filter_by(ip_address=_ip).first()
-
+            if times >= num:
+                return redirect('')
             result = func(*args, **kwargs)
             return result
 

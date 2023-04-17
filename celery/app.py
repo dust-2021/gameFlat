@@ -4,6 +4,7 @@ date: 2023/3/21 23:29
 """
 from celery import Celery
 from config import Config
+import pickle
 
 celery = Celery('celery', broker=Config.BROKER, backend=Config.BACKEND, include=Config.INCLUDE)
 celery.config_from_object(Config)

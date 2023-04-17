@@ -17,11 +17,11 @@ def create_app() -> Flask:
 
     _log = logging.getLogger('base')
 
-    if os.path.exists('config/appConf/flaskPersonal.conf.py'):
-        _log.info('application start with default config.')
+    if os.path.exists('config/appConf/flaskPersonalConf.py'):
+        _log.info('application start with personal config.')
         _app.config.from_pyfile('config/appConf/flaskPersonalConf.py')
     else:
-        _log.info('application start with personal config.')
+        _log.info('application start with default config.')
         _app.config.from_pyfile('config/appConf/flaskConf.py')
 
     session = Session()
