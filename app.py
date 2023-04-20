@@ -6,6 +6,7 @@ from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
 import os
 import logging
+from ant.socket_conn import soc
 
 
 def create_app() -> Flask:
@@ -32,3 +33,7 @@ def create_app() -> Flask:
 
 
 app = create_app()
+soc.init_app(app)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True)

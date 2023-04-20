@@ -24,3 +24,12 @@ fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
 handler.setFormatter(fmt)
 handler.setLevel(logging.INFO)
 func_log.addHandler(handler)
+
+# 初始化用户日志对象
+user_log = logging.getLogger('user')
+user_log.setLevel(logging.INFO)
+handler = logging.FileHandler('log/user_log.log', mode='a+', encoding='utf-8')
+fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
+handler.setFormatter(fmt)
+handler.setLevel(logging.INFO)
+user_log.addHandler(handler)
