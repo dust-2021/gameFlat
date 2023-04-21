@@ -8,26 +8,28 @@ import logging
 from flask import redirect, request, session
 from tools.wrapper import session_checker
 from typing import Union, List
+from config.globalVar import AppGlobal
 
 base_namespace = '/socket'
-
-GLOBAL_ROOM_LIST = []
 
 soc = SocketIO()
 
 
 @soc.on('connect', namespace=base_namespace)
-def connect():
+@session_checker
+def connect(data):
     user = session.get('user_id', request.headers.get('X-Real-IP', request.remote_addr))
     logger = logging.getLogger('user')
     logger.info(f'{user} connect to .')
 
+    room = data.get('', '')
+
 
 @soc.on('disconnect', namespace=base_namespace)
-def disconnect():
+def disconnect(data):
     pass
 
 
 @soc.on('message', namespace=base_namespace)
-def message(msg):
-    print(msg)
+def message(data):
+    print(data)
