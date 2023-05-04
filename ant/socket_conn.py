@@ -22,7 +22,7 @@ def connect(data):
     logger = logging.getLogger('user')
     logger.info(f'{user} connect to .')
 
-    room = data.get('', '')
+    return 'success'
 
 
 @soc.on('disconnect', namespace=base_namespace)
