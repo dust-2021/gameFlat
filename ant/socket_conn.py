@@ -10,14 +10,10 @@ from tools.wrapper import session_checker
 from typing import Union, List
 from config.globalVar import AppGlobal
 
-base_namespace = '/socket'
-
 soc = SocketIO()
-
-
-@soc.on('connect', namespace=base_namespace)
+@soc.on('connect')
 @session_checker
-def connect(data):
+def connect():
     user = session.get('user_id', request.headers.get('X-Real-IP', request.remote_addr))
     logger = logging.getLogger('user')
     logger.info(f'{user} connect to .')
@@ -25,11 +21,11 @@ def connect(data):
     return 'success'
 
 
-@soc.on('disconnect', namespace=base_namespace)
+@soc.on('disconnect')
 def disconnect(data):
     pass
 
 
-@soc.on('message', namespace=base_namespace)
+@soc.on('message')
 def message(data):
     print(data)

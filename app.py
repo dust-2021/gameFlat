@@ -11,8 +11,9 @@ from ant.socket_conn import soc
 
 def create_app() -> Flask:
     """
-    生成app实例，读取app配置，生成session，注册蓝图
-    :return: app实例
+    generate a Flask app object with a config file, initial app session,
+    and register blueprint.
+    :return: app
     """
     _app = Flask(__name__, template_folder='./templates', static_folder='./static')
 
@@ -36,4 +37,4 @@ app = create_app()
 soc.init_app(app)
 
 if __name__ == '__main__':
-    soc.run(host='0.0.0.0', debug=True)
+    soc.run(app, host='0.0.0.0', debug=True)

@@ -29,13 +29,25 @@
                     </li>
                 </ul>
             </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="nav flex-column">
+                        <a class="nav-link" href="">tab</a>
+                        <a class="nav-link" href="">tab</a>
+                    </div>
+                </div>
+                <div class="col-lg-10">
+
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
 </body>
 {% block button_script %}
     <script>
-        let ws = new WebSocket('127.0.0.1:5000/socket');
+        {#let ws = new WebSocket('ws://127.0.0.1:5000/socket');#}
+        {#ws.send('')#}
 
 
     </script>

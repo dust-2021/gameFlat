@@ -50,8 +50,8 @@ def func_log_writer(func):
 
 def set_period_request_count(num: int):
     """
-    周期内访问限制
-    :param num: 限制数
+    limit how many times an IP request a route.
+    :param num: max times.
     :return:
     """
 

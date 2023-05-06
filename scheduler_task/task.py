@@ -4,15 +4,14 @@ date: 2023/4/6 17:26
 """
 from apscheduler.schedulers.background import BackgroundScheduler
 from db.mysqlDB import db_session
-import logging
-from apscheduler.triggers.base import BaseTrigger
+from tools.wrapper import func_log_writer
 
 aps = BackgroundScheduler()
 
-
+@func_log_writer
 def refresh_api_request_times():
     """
-    定时清空api访问计数
+    clear all api request time-count table.
     :return:
     """
     db_session.execute('truncate table peer.apirequestcount;')
