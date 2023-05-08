@@ -22,7 +22,7 @@ def connect():
 
 
 @soc.on('disconnect')
-def disconnect(data):
+def disconnect():
     pass
 
 
