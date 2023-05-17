@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/3/30 17:14
-"""
 from flask import Blueprint, request, render_template, session, redirect
 from tools.wrapper import session_checker
 

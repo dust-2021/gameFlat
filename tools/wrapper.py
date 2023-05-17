@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/3/21 23:52
-"""
 from functools import wraps
 from flask import request, session, redirect
 from db.mysqlDB import db_session, ApiRequestCount
@@ -16,10 +12,11 @@ else:
 
 def session_checker(func):
     """
-    api session检测装饰器
+    wrapper to check the cookies of user.
     :param func:
     :return:
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         _username = session.get('username')
@@ -34,10 +31,11 @@ def session_checker(func):
 
 def func_log_writer(func):
     """
-    函数执行日志记录
-    :param func: 执行函数
+    function execute log.
+    :param func:
     :return:
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         _log = logging.getLogger('funcLogger')
@@ -48,9 +46,9 @@ def func_log_writer(func):
     return wrapper
 
 
-def set_period_request_count(num: int):
+def set_period_request_count(num: int = API_MAX_REQUEST_TIME_PER_MINUTE):
     """
-    limit how many times an IP request a route.
+    limit how many times an IP could request a route.
     :param num: max times.
     :return:
     """
@@ -58,12 +56,22 @@ def set_period_request_count(num: int):
     def period_request_count(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            # get the real IP with using Nginx.
             _ip = request.headers.get('X-real-IP', request.remote_addr)
 
             times = db_session.query(ApiRequestCount.times, ApiRequestCount.user_id).filter_by(ip_address=_ip).first()
+            if not times:
+                data = ApiRequestCount(user_id=session.get('user_id'), ip_address=_ip,
+                                       api_route=request.url, times=0)
+                db_session.add(data)
             if times >= num:
                 return redirect('')
+
+            times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip).first()[0]
+            db_session.query(ApiRequestCount).filter_by(ip_address=_ip).update({'times': int(times) + 1})
             result = func(*args, **kwargs)
+            db_session.commit()
+            db_session.close()
             return result
 
         return wrapper

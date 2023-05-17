@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/4/19 16:16
-"""
 import flask
 from flask_socketio import SocketIO
 import logging
@@ -29,3 +25,7 @@ def disconnect():
 @soc.on('message')
 def message(data):
     print(data)
+
+@soc.on('checkout_room')
+def checkout_room():
+    pass

@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/3/21 23:33
-"""
 import hashlib
 
 import flask

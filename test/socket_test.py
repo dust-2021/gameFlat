@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/4/20 10:25
-"""
 import socketio
 
 sio = socketio.Client()

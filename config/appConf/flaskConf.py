@@ -1,8 +1,7 @@
-"""
-Author: li bo
-date: 2023/3/22 11:34
-"""
 from redis import Redis
+
+IS_THE_MASTER_MACHINE = True
+MASTER_HOST = None
 
 SECRET_KEY = 'example'
 SESSION_TYPE = 'redis'

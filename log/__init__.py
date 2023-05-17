@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/4/10 11:29
-"""
 import logging
 
 # the basic logger

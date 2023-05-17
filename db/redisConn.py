@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/3/31 10:37
-"""
 import os
 from redis import Redis
 

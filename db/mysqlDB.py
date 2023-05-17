@@ -1,7 +1,3 @@
-"""
-Author: li bo
-date: 2023/3/22 11:38
-"""
 from sqlalchemy import Column, VARCHAR, CHAR, INTEGER, FLOAT, DECIMAL, DATETIME, create_engine, BigInteger
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
