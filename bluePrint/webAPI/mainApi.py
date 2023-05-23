@@ -1,5 +1,5 @@
 import hashlib
-
+import requests
 import flask
 from flask import Blueprint, url_for
 from tools.doc.apiDoc import API_RETURN
@@ -7,8 +7,10 @@ from flask import request, session, jsonify
 from db.mysqlDB import db_session
 import logging
 from db.mysqlDB import User
+from config.globalVar import AppGlobal
 
 main_api = Blueprint('main_api', __name__)
+
 
 @main_api.route('/test')
 def test():
@@ -17,13 +19,14 @@ def test():
     print(logger.__dict__)
     return ''
 
+
 @main_api.route('/')
 def index():
     """
 
     :return:
     """
-    return 'this is a flask website api route'
+    return 'this is api route'
 
 
 @main_api.route('/checkAlive')
@@ -55,6 +58,7 @@ def request_repeat():
         res['STATUS'] = 'FAILED'
     return jsonify(res)
 
+
 @main_api.route('/register', methods=['post'])
 def register_user():
     """
@@ -66,5 +70,15 @@ def register_user():
 
     hasher = hashlib.sha256()
     hasher.update(password.encode('utf-8'))
-    user = User(username=username, passwordMD5=hasher.hexdigest())
 
+    if AppGlobal.IS_THE_MASTER_MACHINE:
+        user = User(username=username, passwordMD5=hasher.hexdigest())
+        db_session.add(user)
+        db_session.commit()
+        db_session.close()
+
+
+@main_api.route('/login', methods=['POST'])
+def login():
+    if AppGlobal.IS_THE_MASTER_MACHINE:
+        pass

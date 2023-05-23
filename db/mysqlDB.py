@@ -6,9 +6,9 @@ from hashlib import md5
 import logging
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
-    from config.appConf.flaskPersonalConf import MYSQL_CONF, APP_ADMIN_PASSWORD
+    from config.appConf.flaskPersonalConf import *
 else:
-    from config.appConf.flaskConf import MYSQL_CONF, APP_ADMIN_PASSWORD
+    from config.appConf.flaskConf import *
 
 _Base = declarative_base()
 
@@ -47,23 +47,24 @@ class ApiRequestCount(_Base):
     id = Column(BigInteger, autoincrement=True, primary_key=True)
 
 
-_engine = create_engine(
-    f'mysql+{MYSQL_CONF.get("mysql_engine")}://{MYSQL_CONF.get("username")}'
-    f':{MYSQL_CONF.get("password")}@{MYSQL_CONF.get("host", "127.0.0.1")}:'
-    f'{MYSQL_CONF.get("port", 3306)}/{MYSQL_CONF.get("database")}', pool_size=5)
-db_session = scoped_session(sessionmaker(_engine))
-_Base.metadata.create_all(_engine)
-
-
 def initial_db():
-    # 初始管理员账号
-    if not db_session.query(User.user_id).filter_by(user_id=1).first():
+    _engine = create_engine(
+        f'mysql+{MYSQL_CONF.get("mysql_engine")}://{MYSQL_CONF.get("username")}'
+        f':{MYSQL_CONF.get("password")}@{MYSQL_CONF.get("host", "127.0.0.1")}:'
+        f'{MYSQL_CONF.get("port", 3306)}/{MYSQL_CONF.get("database")}', pool_size=5)
+    _db_session = scoped_session(sessionmaker(_engine))
+    _Base.metadata.create_all(_engine)
+
+    # initial web admin user.
+    if not _db_session.query(User.user_id).filter_by(user_id=1).first():
         hasher = md5(APP_ADMIN_PASSWORD.encode('utf-8'))
 
         admin = User(user_id=1, nickname='admin', passwordMD5=hasher.hexdigest())
-        db_session.add(admin)
-        db_session.commit()
-        db_session.close()
+        _db_session.add(admin)
+        _db_session.commit()
+        _db_session.close()
+    return _db_session
 
 
-initial_db()
+if IS_THE_MASTER_MACHINE:
+    db_session = initial_db()
