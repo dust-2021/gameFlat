@@ -32,9 +32,9 @@ def create_app() -> Flask:
     _app.register_blueprint(page_app, url_prefix='/')
     return _app
 
+app = create_app()
+soc.init_app(app)
 
 if __name__ == '__main__':
-    app = create_app()
     # initial socketIO app.
-    soc.init_app(app)
     soc.run(app, host='0.0.0.0', debug=True)
