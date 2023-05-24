@@ -14,3 +14,8 @@ def smtp_sender():
 @celery.task
 def python_executor():
     pass
+
+
+@celery.task
+def mysql_executor():
+    pass
