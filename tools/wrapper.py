@@ -5,9 +5,9 @@ import os
 import logging
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
-    from config.appConf.flaskPersonalConf import API_PROTECT, API_MAX_REQUEST_TIME_PER_MINUTE
+    from config.appConf.flaskPersonalConf import *
 else:
-    from config.appConf.flaskConf import API_PROTECT, API_MAX_REQUEST_TIME_PER_MINUTE
+    from config.appConf.flaskConf import *
 
 
 def session_checker(func):
@@ -44,7 +44,6 @@ def func_log_writer(func):
         return res
 
     return wrapper
-
 
 def set_period_request_count(num: int = API_MAX_REQUEST_TIME_PER_MINUTE):
     """

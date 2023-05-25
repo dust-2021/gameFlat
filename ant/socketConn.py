@@ -1,10 +1,7 @@
-import flask
 from flask_socketio import SocketIO
 import logging
-from flask import redirect, request, session
+from flask import request, session
 from tools.wrapper import session_checker
-from typing import Union, List
-from config.globalVar import AppGlobal
 
 soc = SocketIO()
 @soc.on('connect')

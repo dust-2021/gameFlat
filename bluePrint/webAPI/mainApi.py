@@ -1,13 +1,11 @@
 import hashlib
-import requests
-import flask
-from flask import Blueprint, url_for
+from flask import Blueprint
 from tools.doc.apiDoc import API_RETURN
-from flask import request, session, jsonify
+from flask import request, jsonify
 from db.mysqlDB import db_session
 import logging
 from db.mysqlDB import User
-from config.globalVar import AppGlobal
+from etc.globalVar import AppGlobal
 
 main_api = Blueprint('main_api', __name__)
 
@@ -58,27 +56,3 @@ def request_repeat():
         res['STATUS'] = 'FAILED'
     return jsonify(res)
 
-
-@main_api.route('/register', methods=['post'])
-def register_user():
-    """
-
-    :return:
-    """
-    username = request.form.get('username')
-    password = request.form.get('password')
-
-    hasher = hashlib.sha256()
-    hasher.update(password.encode('utf-8'))
-
-    if AppGlobal.IS_THE_MASTER_MACHINE:
-        user = User(username=username, passwordMD5=hasher.hexdigest())
-        db_session.add(user)
-        db_session.commit()
-        db_session.close()
-
-
-@main_api.route('/login', methods=['POST'])
-def login():
-    if AppGlobal.IS_THE_MASTER_MACHINE:
-        pass

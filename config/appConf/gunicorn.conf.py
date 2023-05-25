@@ -1,6 +1,7 @@
 import multiprocessing
 
-workers = multiprocessing.cpu_count() * 2 - 1
+# workers = multiprocessing.cpu_count() * 2 - 1
+workers = 2
 threads = 2
 
 bind = '0.0.0.0:5000'
