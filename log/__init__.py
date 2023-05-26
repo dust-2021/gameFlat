@@ -24,7 +24,7 @@ def logger_creator():
     # initialize function called logger
     func_log = logging.getLogger('funcLogger')
     func_log.setLevel(logging.INFO)
-    handler = logging.FileHandler(LOG_FILE + '/func_log.log', mode='a+', encoding='utf-8')
+    handler = logging.FileHandler(filename=LOG_FILE + '/func_log.log', mode='a+', encoding='utf-8')
     fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
     handler.setFormatter(fmt)
     handler.setLevel(logging.INFO)
