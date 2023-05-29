@@ -16,7 +16,6 @@ def session_checker(func):
     :param func:
     :return:
     """
-
     @wraps(func)
     def wrapper(*args, **kwargs):
         _username = session.get('username')

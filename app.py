@@ -6,7 +6,7 @@ from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
 import os
 import logging
-from ant.socketConn import soc
+from ant.socketApi import soc
 
 
 def create_app() -> Flask:
@@ -26,15 +26,21 @@ def create_app() -> Flask:
         _log.info('application start with default config.')
         _app.config.from_pyfile('config/appConf/flaskConf.py')
 
-    session = Session()
-    session.init_app(_app)
     _app.register_blueprint(main_api, url_prefix='/api')
     _app.register_blueprint(page_app, url_prefix='/')
+
+    if _app.config.get('IS_THE_MASTER_MACHINE'):
+        from bluePrint.webAPI.masterMachineApi import master
+
+        _app.register_blueprint(master, url_prefix='master')
+
+        session = Session()
+        session.init_app(_app)
     return _app
+
 
 app = create_app()
 soc.init_app(app)
 
 if __name__ == '__main__':
-    # initial socketIO app.
     soc.run(app, host='0.0.0.0', debug=True)

@@ -32,4 +32,8 @@ def login():
     if AppGlobal.IS_THE_MASTER_MACHINE:
         pass
 
+@master.route('/new_machine', methods=['POST'])
+def new_machine():
+    pass
+
 

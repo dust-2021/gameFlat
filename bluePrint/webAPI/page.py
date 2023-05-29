@@ -1,5 +1,5 @@
-from flask import Blueprint, request, render_template, session, redirect
-from tools.wrapper import session_checker
+from flask import Blueprint, render_template, redirect
+from etc.tools.wrapper import session_checker
 
 page_app = Blueprint('page_app', __name__)
 
@@ -13,3 +13,8 @@ def index():
 @session_checker
 def login():
     return redirect('/')
+
+
+@page_app.route('/denied')
+def denied():
+    pass

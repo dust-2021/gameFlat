@@ -1,11 +1,7 @@
-import hashlib
 from flask import Blueprint
-from tools.doc.apiDoc import API_RETURN
+from etc.tools.doc.apiDoc import API_RETURN
 from flask import request, jsonify
-from db.mysqlDB import db_session
 import logging
-from db.mysqlDB import User
-from etc.globalVar import AppGlobal
 
 main_api = Blueprint('main_api', __name__)
 
