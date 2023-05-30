@@ -1,13 +1,9 @@
 from functools import wraps
-from flask import request, session, redirect
+from flask import request, session, redirect, current_app
 from db.mysqlDB import db_session, ApiRequestCount
 import os
 import logging
-
-if os.path.exists('config/appConf/flaskPersonalConf.py'):
-    from config.appConf.flaskPersonalConf import *
-else:
-    from config.appConf.flaskConf import *
+from etc.globalVar import AppGlobal
 
 
 def session_checker(func):
@@ -16,6 +12,7 @@ def session_checker(func):
     :param func:
     :return:
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         _username = session.get('username')
@@ -44,25 +41,32 @@ def func_log_writer(func):
 
     return wrapper
 
-def set_period_request_count(num: int = API_MAX_REQUEST_TIME_PER_MINUTE):
+
+def set_period_request_count(num: int = None):
     """
     limit how many times an IP could request a route.
     :param num: max times.
     :return:
     """
+    if num is None:
+        num = AppGlobal.API_MAX_REQUEST_TIME_PER_MINUTE
 
     def period_request_count(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # get the real IP with using Nginx.
+
+            if not AppGlobal.API_PROTECT:
+                return func(*args, **kwargs)
+
+            # get the real IP while using Nginx.
             _ip = request.headers.get('X-real-IP', request.remote_addr)
 
-            times = db_session.query(ApiRequestCount.times, ApiRequestCount.user_id).filter_by(ip_address=_ip).first()
+            times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip, api_route=request.url).first()[0]
             if not times:
                 data = ApiRequestCount(user_id=session.get('user_id'), ip_address=_ip,
                                        api_route=request.url, times=0)
                 db_session.add(data)
-            if times >= num:
+            elif times >= num:
                 return redirect('')
 
             times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip).first()[0]

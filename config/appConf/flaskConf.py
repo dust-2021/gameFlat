@@ -6,6 +6,9 @@ from redis import Redis
 IS_THE_MASTER_MACHINE = True
 MASTER_HOST = None
 
+# if this is False, the slave app's IP must have been added in allowed list by admin user.
+PUBLIC_SLAVE_MACHINE = False
+
 SECRET_KEY = 'example'
 
 LOGIN_FOR_SOCKETIO = False
@@ -22,7 +25,7 @@ APP_ENV = 'development'
 
 # if this arg is True, some api can not be request more than 30 times per minute,
 # if more than 30 times, the request IP will be baned.
-API_PROTECT = False
+API_PROTECT = True
 API_MAX_REQUEST_TIME_PER_MINUTE = 30
 
 REDIS_CONFIG = {

@@ -8,11 +8,12 @@ soc = SocketIO()
 @soc.on('connect')
 def connect():
     username = session.get('username')
+    ip = request.headers.get('X-real-IP', request.remote_addr)
     if not username:
         disconnect()
 
     logger = logging.getLogger('user')
-    logger.info(f'{username} connected.')
+    logger.info(f'{username} connected at {ip}.')
     socket_redis.set(username, '')
 
 

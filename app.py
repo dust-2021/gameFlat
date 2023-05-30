@@ -32,7 +32,7 @@ def create_app() -> Flask:
     if _app.config.get('IS_THE_MASTER_MACHINE'):
         from bluePrint.webAPI.masterMachineApi import master
 
-        _app.register_blueprint(master, url_prefix='master')
+        _app.register_blueprint(master, url_prefix='/master')
 
         session = Session()
         session.init_app(_app)
