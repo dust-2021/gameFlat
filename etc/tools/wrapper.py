@@ -66,6 +66,7 @@ def set_period_request_count(num: int = None):
                 data = ApiRequestCount(user_id=session.get('user_id'), ip_address=_ip,
                                        api_route=request.url, times=0)
                 db_session.add(data)
+                db_session.commit()
             elif times >= num:
                 return redirect('')
 

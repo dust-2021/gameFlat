@@ -17,8 +17,8 @@ class User(_Base):
     __tablename__ = 'User'
 
     user_id = Column(BigInteger, index=True)
-    phone_number = Column(CHAR(14))
-    email_address = Column(VARCHAR(32))
+    phone_number = Column(CHAR(14), index=True)
+    email_address = Column(VARCHAR(32), index=True)
     nickname = Column(VARCHAR(32))
     user_age = Column(INTEGER)
     passwordMD5 = Column(CHAR(32))
