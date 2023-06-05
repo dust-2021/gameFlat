@@ -37,7 +37,6 @@ def create_app() -> Flask:
         from jobs.sche import aps
 
         _app.register_blueprint(master, url_prefix='/master')
-        aps.start()
 
         session = Session()
         session.init_app(_app)
