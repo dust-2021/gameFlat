@@ -26,7 +26,7 @@ executors = {
 
 job_defaults = {
     'coalesce': False,
-    'max_instances': 3
+    'max_instances': 5
 }
 
 aps = BackgroundScheduler(job_store=job_store, executors=executors, job_defaults=job_defaults)
@@ -36,3 +36,4 @@ _log.info('apscheduler start.')
 
 if AppGlobal.API_PROTECT:
     aps.add_job(refresh_api_request_times, trigger='cron', minute='*', second='0', replace_existing=True)
+    aps.add_job(update_ip_denied, trigger='cron', day='*', hour='3', replace_existing=True)

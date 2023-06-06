@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import request, session, redirect, current_app
-from db.mysqlDB import db_session, ApiRequestCount
+from db.mysqlDB import db_session, ApiRequestCount, DeniedIP
+from sqlalchemy import text
 import os
 import logging
 from etc.globalVar import AppGlobal
@@ -61,16 +62,23 @@ def set_period_request_count(num: int = None):
             # get the real IP while using Nginx.
             _ip = request.headers.get('X-real-IP', request.remote_addr)
 
-            times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip, api_route=request.url).first()[0]
-            if not times:
+            times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip, api_route=request.url).first()
+            if times is None:
                 data = ApiRequestCount(user_id=session.get('user_id'), ip_address=_ip,
                                        api_route=request.url, times=0)
                 db_session.add(data)
                 db_session.commit()
-            elif times >= num:
+            elif times[0] >= num:
+                level = db_session.query(DeniedIP.level).filter_by(ip_address=_ip).first()
+                if level is None:
+                    _mem = DeniedIP(ip_address=_ip, level=1)
+                    db_session.add(_mem)
+                    db_session.commit()
+                elif level[0] < 10:
+                    db_session.query(DeniedIP).filter_by(ip_address=_ip).update({'level': level[0] + 1})
                 return redirect('')
 
-            times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip).first()[0]
+            times = times[0]
             db_session.query(ApiRequestCount).filter_by(ip_address=_ip).update({'times': int(times) + 1})
             result = func(*args, **kwargs)
             db_session.commit()

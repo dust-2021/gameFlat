@@ -47,6 +47,14 @@ class ApiRequestCount(_Base):
     id = Column(BigInteger, autoincrement=True, primary_key=True)
 
 
+class DeniedIP(_Base):
+    __tablename__ = 'DeniedIP'
+
+    ip_address = Column(CHAR(20))
+    level = Column(INTEGER)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
 def initial_db():
     _engine = create_engine(
         f'mysql+{MYSQL_CONF.get("mysql_engine")}://{MYSQL_CONF.get("username")}'

@@ -1,7 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 from flask_session import Session
 
-import log
 from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
 import os
@@ -33,8 +32,7 @@ def create_app() -> Flask:
 
     # master machine config
     if _app.config.get('IS_THE_MASTER_MACHINE'):
-        from bluePrint.webAPI.masterMachineApi import master
-        from jobs.sche import aps
+        from bluePrint.master.masterMainApi import master
 
         _app.register_blueprint(master, url_prefix='/master')
 
@@ -45,6 +43,11 @@ def create_app() -> Flask:
 
 app = create_app()
 soc.init_app(app)
+
+
+@app.before_request
+def denied_ip_check():
+    _ip = request.headers.get('X-real-IP', request.remote_addr)
 
 if __name__ == '__main__':
     soc.run(app, host='0.0.0.0', debug=True)

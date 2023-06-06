@@ -1,8 +1,9 @@
 import logging
 from sqlalchemy import text
-from db.mysqlDB import db_session
+from db.mysqlDB import db_session, DeniedIP, ApiRequestCount
 from etc.tools.wrapper import func_log_writer
 from etc.globalVar import AppGlobal
+
 
 @func_log_writer
 def refresh_api_request_times():
@@ -10,10 +11,17 @@ def refresh_api_request_times():
     clear all api request time-count table.
     :return:
     """
-    _log = logging.getLogger('funcLogger')
-    _log.info(f'task: \'refresh_api_request_times\' executed.')
+    db_session.execute(text(f'truncate table {ApiRequestCount.__tablename__}'))
+    db_session.commit()
+    db_session.close()
 
-    db_session.execute(text('truncate table peer.apirequestcount'))
+@func_log_writer
+def update_ip_denied():
+    """
+    turn down all ip denied level if level lt 10
+    :return:
+    """
+    db_session.execute(text(f'update {DeniedIP.__tablename__} set level = level -1 where level < 10'))
     db_session.commit()
     db_session.close()
 
@@ -21,6 +29,3 @@ def refresh_api_request_times():
 @func_log_writer
 def reload_nginx():
     pass
-
-
-

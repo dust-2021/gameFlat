@@ -19,4 +19,4 @@ cache_redis = Redis(host=REDIS_CONFIG.get('host', '127.0.0.1'), password=REDIS_C
                     port=REDIS_CONFIG.get('port'), db=3)
 
 socket_redis = Redis(host=REDIS_CONFIG.get('host', '127.0.0.1'), password=REDIS_CONFIG.get('password'),
-                     port=REDIS_CONFIG.get('port'), db=3)
+                     port=REDIS_CONFIG.get('port'), db=4)
