@@ -44,10 +44,5 @@ def create_app() -> Flask:
 app = create_app()
 soc.init_app(app)
 
-
-@app.before_request
-def denied_ip_check():
-    _ip = request.headers.get('X-real-IP', request.remote_addr)
-
 if __name__ == '__main__':
     soc.run(app, host='0.0.0.0', debug=True)
