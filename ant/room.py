@@ -1,4 +1,4 @@
-from etc.globalVar import AppGlobal
+from etc.globalVar import AppConfig
 from hashlib import sha256
 from typing import Union, Mapping, Sequence, List
 

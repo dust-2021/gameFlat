@@ -14,7 +14,7 @@ def create_app() -> Flask:
     and register blueprint.
     :return: app
     """
-    _app = Flask(__name__, template_folder='./templates', static_folder='./static')
+    _app = Flask(__name__, template_folder='templates', static_folder='static')
 
     _log = logging.getLogger('base')
 
@@ -44,5 +44,6 @@ def create_app() -> Flask:
 app = create_app()
 soc.init_app(app)
 
-if __name__ == '__main__':
-    soc.run(app, host='0.0.0.0', debug=True)
+
+def information_dump():
+    pass

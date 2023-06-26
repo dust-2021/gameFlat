@@ -1,5 +1,9 @@
 from redis import Redis
 
+# ------------------
+# app load config from this file if there doesn't exist a named flaskPersonalConf.py
+# ------------------
+
 # if this arg is True,this app will be a master app, the data will store in
 # local databases. if this arg is False, the data will store in master-host app,
 # and this app can not work without master app.

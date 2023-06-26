@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 import os
 from hashlib import md5
-import logging
+from etc.globalVar import AppConfig
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import *
@@ -19,7 +19,7 @@ class User(_Base):
     user_id = Column(BigInteger, index=True)
     phone_number = Column(CHAR(14), index=True)
     email_address = Column(VARCHAR(32), index=True)
-    nickname = Column(VARCHAR(32))
+    nickname = Column(VARCHAR(32), default=None)
     user_age = Column(INTEGER)
     passwordMD5 = Column(CHAR(32))
     lock_status = Column(INTEGER)
@@ -65,7 +65,8 @@ def initial_db():
 
     # initial web admin user.
     if not _db_session.query(User.user_id).filter_by(user_id=1).first():
-        hasher = md5(APP_ADMIN_PASSWORD.encode('utf-8'))
+        pw = APP_ADMIN_PASSWORD + AppConfig.SECRET_KEY
+        hasher = md5(pw.encode('utf-8'))
 
         admin = User(user_id=1, nickname='admin', passwordMD5=hasher.hexdigest())
         _db_session.add(admin)

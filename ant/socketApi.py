@@ -1,7 +1,7 @@
 from flask_socketio import SocketIO, disconnect, join_room, leave_room
 import logging
 from flask import request, session
-from etc.globalVar import AppGlobal
+from etc.globalVar import AppConfig
 from db.redisConn import socket_redis
 
 soc = SocketIO()

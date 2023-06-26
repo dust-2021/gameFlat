@@ -2,7 +2,7 @@ import logging
 from sqlalchemy import text
 from db.mysqlDB import db_session, DeniedIP, ApiRequestCount
 from etc.tools.wrapper import func_log_writer
-from etc.globalVar import AppGlobal
+from etc.globalVar import AppConfig
 
 
 @func_log_writer

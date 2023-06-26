@@ -6,10 +6,11 @@ else:
     from config.appConf.flaskConf import *
 
 
-class AppGlobal:
+class AppConfig:
     """
     global variable
     """
+    SECRET_KEY = SECRET_KEY
     #
     IS_THE_MASTER_MACHINE = IS_THE_MASTER_MACHINE
     #

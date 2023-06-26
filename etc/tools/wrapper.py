@@ -4,7 +4,7 @@ from db.mysqlDB import db_session, ApiRequestCount, DeniedIP
 from sqlalchemy import text
 import os
 import logging
-from etc.globalVar import AppGlobal
+from etc.globalVar import AppConfig
 
 
 def session_checker(func):
@@ -50,20 +50,20 @@ def set_period_request_count(num: int = None):
     :return:
     """
     if num is None:
-        num = AppGlobal.API_MAX_REQUEST_TIME_PER_MINUTE
+        num = AppConfig.API_MAX_REQUEST_TIME_PER_MINUTE
 
     def period_request_count(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
 
-            if not AppGlobal.API_PROTECT:
+            if not AppConfig.API_PROTECT:
                 return func(*args, **kwargs)
 
             # get the real IP while using Nginx.
             _ip = request.headers.get('X-real-IP', request.remote_addr)
 
             times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip, api_route=request.url).first()
-            if times is None:
+            if times is None or len(times) == 0:
                 data = ApiRequestCount(user_id=session.get('user_id'), ip_address=_ip,
                                        api_route=request.url, times=0)
                 db_session.add(data)

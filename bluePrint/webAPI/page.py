@@ -13,9 +13,9 @@ def index():
 @page_app.route('/login')
 @set_period_request_count()
 def login():
-    return redirect('/')
+    return render_template('login.html')
 
 
 @page_app.route('/denied')
 def denied():
-    pass
+    return render_template('deny.html')

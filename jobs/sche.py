@@ -3,7 +3,7 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor
 from sqlalchemy import create_engine
 import os
-from etc.globalVar import AppGlobal
+from etc.globalVar import AppConfig
 from jobs.task import *
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
@@ -34,6 +34,6 @@ aps.start()
 _log = logging.getLogger('base')
 _log.info('apscheduler start.')
 
-if AppGlobal.API_PROTECT:
+if AppConfig.API_PROTECT:
     aps.add_job(refresh_api_request_times, trigger='cron', minute='*', second='0', replace_existing=True)
     aps.add_job(update_ip_denied, trigger='cron', day='*', hour='3', replace_existing=True)
