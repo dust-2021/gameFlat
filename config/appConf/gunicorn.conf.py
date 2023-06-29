@@ -8,6 +8,8 @@ bind = '0.0.0.0:5000'
 worker_class = 'eventlet'
 worker_connections = 500
 loglevel = 'info'
-# daemon = True
-access_log = '/var/log/gunicorn/access.log'
-error_log = '/var/log/gunicorn/error.log'
+daemon = True
+
+pidfile = './info/pid'
+accesslog = '/var/log/gunicorn/access.log'
+errorlog = '/var/log/gunicorn/error.log'

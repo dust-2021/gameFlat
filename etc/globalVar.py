@@ -6,20 +6,41 @@ else:
     from config.appConf.flaskConf import *
 
 
+
 class AppConfig:
     """
-    global variable
+    global variable, load app start config into memcache, admin user can modify these
+    configs while app running.
     """
-    SECRET_KEY = SECRET_KEY
+    # app secret key for session and password hash, can't modify after init.
+    SECRET_KEY: str = SECRET_KEY
     #
-    IS_THE_MASTER_MACHINE = IS_THE_MASTER_MACHINE
+    IS_THE_MASTER_MACHINE: bool = IS_THE_MASTER_MACHINE
     #
-    MASTER_HOST = MASTER_HOST
+    MASTER_HOST: str = MASTER_HOST
     #
-    API_PROTECT = API_PROTECT
+    ACCEPT_FROM_MASTER: bool = ACCEPT_FROM_MASTER
     #
-    API_MAX_REQUEST_TIME_PER_MINUTE = API_MAX_REQUEST_TIME_PER_MINUTE
+    API_PROTECT: bool = API_PROTECT
+    #
+    API_MAX_REQUEST_TIME_PER_MINUTE: int = API_MAX_REQUEST_TIME_PER_MINUTE
 
-    PEER_ROOM = list()
-    DISABLE_IP = list()
-    GLOBAL_ROOM_LIST = []
+    MAX_CONNECTION: int = 500
+
+
+
+
+class AppStatus:
+    """
+
+    """
+    CPU_TOTAL = 0
+    CPU_USED = 0
+    MEMORY_TOTAL = 0
+    MEMORY_USED = 0
+    CONNECTED_USER = 0
+
+
+    @classmethod
+    def refresh_status(cls):
+        pass

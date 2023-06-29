@@ -9,6 +9,7 @@ from redis import Redis
 # and this app can not work without master app.
 IS_THE_MASTER_MACHINE = True
 MASTER_HOST = None
+ACCEPT_FROM_MASTER = True
 
 # if this is False, the slave app's IP must have been added in allowed list by admin user.
 PUBLIC_SLAVE_MACHINE = False

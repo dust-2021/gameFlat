@@ -29,7 +29,7 @@ job_defaults = {
     'max_instances': 5
 }
 
-aps = BackgroundScheduler(job_store=job_store, executors=executors, job_defaults=job_defaults)
+aps = BackgroundScheduler(job_store=job_store, executors=executors, job_defaults=job_defaults, timezone='Asia/Shanghai')
 aps.start()
 _log = logging.getLogger('base')
 _log.info('apscheduler start.')

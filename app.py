@@ -1,11 +1,15 @@
 from flask import Flask, request
 from flask_session import Session
 
+# this import will initial all logger object.
+import log
+
 from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
 import os
 import logging
 from ant.socketApi import soc
+from jobs.sche import aps
 
 
 def create_app() -> Flask:

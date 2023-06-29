@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, session, redirect, current_app
+from flask import request, session, redirect, current_app, render_template
 from db.mysqlDB import db_session, ApiRequestCount, DeniedIP
 from sqlalchemy import text
 import os
@@ -45,7 +45,7 @@ def func_log_writer(func):
 
 def set_period_request_count(num: int = None):
     """
-    limit how many times an IP could request a route.
+    route get request times limit from a single ip address
     :param num: max times.
     :return:
     """
@@ -65,9 +65,11 @@ def set_period_request_count(num: int = None):
             times = db_session.query(ApiRequestCount.times).filter_by(ip_address=_ip, api_route=request.url).first()
             if times is None or len(times) == 0:
                 data = ApiRequestCount(user_id=session.get('user_id'), ip_address=_ip,
-                                       api_route=request.url, times=0)
+                                       api_route=request.url, times=1)
                 db_session.add(data)
                 db_session.commit()
+                return func(*args, **kwargs)
+
             elif times[0] >= num:
                 level = db_session.query(DeniedIP.level).filter_by(ip_address=_ip).first()
                 if level is None:
@@ -76,7 +78,7 @@ def set_period_request_count(num: int = None):
                     db_session.commit()
                 elif level[0] < 10:
                     db_session.query(DeniedIP).filter_by(ip_address=_ip).update({'level': level[0] + 1})
-                return redirect('')
+                return render_template('deny.html')
 
             times = times[0]
             db_session.query(ApiRequestCount).filter_by(ip_address=_ip).update({'times': int(times) + 1})

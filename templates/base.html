@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     {% block head %}
-        <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0-alpha3/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0-alpha3/css/bootstrap.min.css"
+              rel="stylesheet">
         <link href="">
         <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0-alpha3/js/bootstrap.bundle.min.js"></script>
     {% endblock %}
@@ -11,7 +12,7 @@
 </head>
 <body>
 {% block body %}
-{#    svg图标 #}
+    {#    svg图标 #}
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="bootstrap" viewBox="0 0 118 94">
             <title>Bootstrap</title>
@@ -81,56 +82,39 @@
         <div class="container-fluid">
             <div class="row">
                 {#              顶部导航 #}
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Offcanvas navbar large">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="">Main Page</a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2"
-                             aria-labelledby="offcanvasNavbar2Label">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Offcanvas</h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="offcanvas-body">
-                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="">Login</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="">machine</a>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" role="button"
-                                           data-bs-toggle="dropdown" aria-expanded="false">
-                                            User
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Action</a></li>
-                                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <form class="d-flex mt-3 mt-lg-0" role="search">
-                                    <input class="form-control me-2" type="search" placeholder="Search"
-                                           aria-label="Search">
-                                    <button class="btn btn-outline-success" type="submit">Search</button>
-                                </form>
+                <header class="p-3 text-bg-dark">
+                    <div class="container">
+                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                                    <use xlink:href="#bootstrap"></use>
+                                </svg>
+                            </a>
+
+                            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                                <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                                <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                                <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                            </ul>
+
+                            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                                <input type="search" class="form-control form-control-dark text-bg-dark"
+                                       placeholder="Search..." aria-label="Search">
+                            </form>
+
+                            <div class="text-end">
+                                <button type="button" class="btn btn-outline-light me-2">Login</button>
+                                <button type="button" class="btn btn-warning">Sign-up</button>
                             </div>
                         </div>
                     </div>
-                </nav>
+                </header>
 
             </div>
             <div class="row">
-{#              侧面导航  #}
+                {#              侧面导航  #}
                 <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px;">
                     <a href="/"
                        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">

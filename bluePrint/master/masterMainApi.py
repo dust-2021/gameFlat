@@ -1,4 +1,5 @@
 import hashlib
+import re
 
 from flask import request, session, redirect, Blueprint, url_for
 from sqlalchemy import or_
@@ -23,11 +24,15 @@ def register_user():
     hasher = hashlib.sha256()
     hasher.update((password + AppConfig.SECRET_KEY).encode('utf-8'))
 
-    if AppConfig.IS_THE_MASTER_MACHINE:
-        user = User(username=username, passwordMD5=hasher.hexdigest())
-        db_session.add(user)
-        db_session.commit()
-        db_session.close()
+    if re.match('\d{13}', username):
+        user = User(phone_number=username, passwordMD5=hasher.hexdigest())
+    elif re.match('\w+@\w+\.com', username):
+        user = User(email_address=username, passwordMD5=hasher.hexdigest())
+    else:
+        return
+    db_session.add(user)
+    db_session.commit()
+    db_session.close()
 
 
 @master.route('/login', methods=['POST'])
