@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import os
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
@@ -13,7 +14,7 @@ def logger_creator():
     log.setLevel(logging.INFO)
     std_handler = logging.StreamHandler()
     std_handler.setLevel(logging.INFO)
-    file_handler = logging.FileHandler(filename=LOG_FILE + '/base_log.log', encoding='utf-8', mode='a+')
+    file_handler = TimedRotatingFileHandler(LOG_FILE + '/base.log', when='D', interval=10)
     file_handler.setLevel(logging.INFO)
     fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
     std_handler.setFormatter(fmt)
@@ -24,7 +25,7 @@ def logger_creator():
     # initialize function called logger
     func_log = logging.getLogger('funcLogger')
     func_log.setLevel(logging.INFO)
-    handler = logging.FileHandler(filename=LOG_FILE + '/func_log.log', mode='a+', encoding='utf-8')
+    handler = TimedRotatingFileHandler(LOG_FILE + '/execute.log', when='D', interval=10)
     fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
     handler.setFormatter(fmt)
     handler.setLevel(logging.INFO)
@@ -33,7 +34,7 @@ def logger_creator():
     # initialize user logger
     user_log = logging.getLogger('user')
     user_log.setLevel(logging.INFO)
-    handler = logging.FileHandler(LOG_FILE + '/user_log.log', mode='a+', encoding='utf-8')
+    handler = TimedRotatingFileHandler(LOG_FILE + '/user.log', when='D', interval=10)
     fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
     handler.setFormatter(fmt)
     handler.setLevel(logging.INFO)

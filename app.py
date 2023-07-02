@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_session import Session
 
-# this import will initial all logger object.
+# this import will initial logger object.
 import log
 
 from bluePrint.webAPI.mainApi import main_api
@@ -9,7 +9,16 @@ from bluePrint.webAPI.page import page_app
 import os
 import logging
 from ant.socketApi import soc
-from jobs.sche import aps
+
+
+def master_machine_init(_app: Flask):
+    from bluePrint.master.masterMainApi import master
+    from jobs.sche import aps
+
+    aps.start()
+    _app.register_blueprint(master, url_prefix='/master')
+    session = Session()
+    session.init_app(_app)
 
 
 def create_app() -> Flask:
@@ -36,12 +45,8 @@ def create_app() -> Flask:
 
     # master machine config
     if _app.config.get('IS_THE_MASTER_MACHINE'):
-        from bluePrint.master.masterMainApi import master
+        master_machine_init(_app)
 
-        _app.register_blueprint(master, url_prefix='/master')
-
-        session = Session()
-        session.init_app(_app)
     return _app
 
 
