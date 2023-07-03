@@ -28,8 +28,7 @@ LOG_FILE = 'log'
 APP_ADMIN_PASSWORD = ''
 APP_ENV = 'development'
 
-# if this arg is True, some api can not be request more than 30 times per minute,
-# if more than 30 times, the request IP will be baned.
+# protect api route, set a default value to limit a api route can be requested by an IP in a minute.
 API_PROTECT = True
 API_MAX_REQUEST_TIME_PER_MINUTE = 30
 
