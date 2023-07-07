@@ -1,10 +1,10 @@
 import os
+import psutil
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import *
 else:
     from config.appConf.flaskConf import *
-
 
 
 class AppConfig:
@@ -28,18 +28,15 @@ class AppConfig:
     MAX_CONNECTION: int = 500
 
 
-
-
 class AppStatus:
     """
 
     """
-    CPU_TOTAL = 0
-    CPU_USED = 0
-    MEMORY_TOTAL = 0
-    MEMORY_USED = 0
-    CONNECTED_USER = 0
-
+    CPU_CORE: int = 0
+    CPU_USED: int = 0
+    MEMORY_TOTAL: int = 0
+    MEMORY_USED: int = 0
+    CONNECTED_USER: int = 0
 
     @classmethod
     def refresh_status(cls):

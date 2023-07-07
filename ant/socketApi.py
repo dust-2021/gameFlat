@@ -1,4 +1,4 @@
-from flask_socketio import SocketIO, disconnect, join_room, leave_room
+from flask_socketio import SocketIO, disconnect, join_room, leave_room, rooms, close_room
 import logging
 from flask import request, session
 from etc.globalVar import AppConfig
@@ -13,7 +13,7 @@ def connect():
         disconnect()
 
     logger = logging.getLogger('user')
-    logger.info(f'{username} connected at {ip}.')
+    logger.info(f'{username} connected from {ip}.')
     socket_redis.set(username, '')
 
 
