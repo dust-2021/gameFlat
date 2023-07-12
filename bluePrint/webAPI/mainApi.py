@@ -1,5 +1,4 @@
 from flask import Blueprint
-from etc.tools.doc.apiDoc import API_RETURN
 from flask import request, jsonify
 import logging
 
@@ -29,9 +28,11 @@ def check_alive():
 
     :return:
     """
-    res = API_RETURN.copy()
-    res['MESSAGE'] = 'app is alive'
-    res['STATUS'] = 'SUCCESS'
+    res = {
+        'MESSAGE': 'app is alive',
+        'STATUS': 'SUCCESS',
+        'DATA': None
+    }
     return jsonify(res)
 
 
@@ -41,7 +42,11 @@ def request_repeat():
 
     :return:
     """
-    res = API_RETURN.copy()
+    res = {
+        'MESSAGE': None,
+        'STATUS': None,
+        'DATA': None
+    }
     if request.method.upper() == 'POST':
         res['STATUS'] = 'SUCCESS'
         res['DATA'] = request.data

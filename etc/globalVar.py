@@ -32,9 +32,9 @@ class AppStatus:
     """
 
     """
-    CPU_CORE: int = 0
-    CPU_USED: int = 0
-    MEMORY_TOTAL: int = 0
+    CPU_CORE: int = psutil.cpu_count()
+    CPU_USED: int = psutil.cpu_percent()
+    MEMORY_TOTAL: int = psutil
     MEMORY_USED: int = 0
     CONNECTED_USER: int = 0
 

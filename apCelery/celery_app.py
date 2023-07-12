@@ -1,12 +1,13 @@
 from celery import Celery
-from config import Config
+from .config import Config
 import pickle
 
-celery = Celery('celery', broker=Config.BROKER, backend=Config.BACKEND, include=Config.INCLUDE)
-celery.config_from_object(Config)
+celery_app = Celery('apCelery', broker=Config.BROKER, backend=Config.BACKEND, include=Config.INCLUDE)
+celery_app.config_from_object(Config)
+
 
 class TaskLoader:
-    app = celery
+    app = celery_app
 
     def __init__(self, func_name: str, load_type: str, func_code: str, trigger: dict):
         self.func_name = func_name

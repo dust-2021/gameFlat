@@ -1,4 +1,7 @@
+import json
+
 from redis import Redis
+import os
 
 # ------------------
 # app load config from this file if there doesn't exist a named flaskPersonalConf.py
@@ -48,3 +51,16 @@ MYSQL_CONF = {
 }
 if IS_THE_MASTER_MACHINE:
     SESSION_REDIS = Redis(host=REDIS_CONFIG.get('host'), password=REDIS_CONFIG.get('password'))
+
+SMTP_CONF = {
+    'email': '',
+    'password': '',
+    'server_host': '',
+    'server_port': 25
+}
+
+os.environ['smtp_config'] = json.dumps(SMTP_CONF)
+
+SMS_CONF = {
+
+}
