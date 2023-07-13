@@ -1,5 +1,6 @@
 import hashlib
 import re
+import uuid
 
 from flask import request, session, redirect, Blueprint, url_for, jsonify
 from sqlalchemy import or_
@@ -8,6 +9,7 @@ from etc.globalVar import AppConfig
 from etc.tools.wrapper import set_period_request_count, session_checker
 from hashlib import sha256
 from apCelery.task import register_email_code, register_sms_code
+from celery.result import AsyncResult
 from db.redisConn import celery_redis
 
 master = Blueprint('master', __name__)
@@ -29,19 +31,17 @@ def register_user():
     }
     data = request.json
     username = data.get('username')
-    res = db_session.query(User.passwordMD5).filter_by(
+    res = db_session.query(User.passwordMD5).filter(
         or_(User.phone_number == username, User.email_address == username)).first()
     if len(res) == 0:
         resp['STATUS'] = 500
         resp['MESSAGE'] = 'account already exist'
         return jsonify(resp)
 
-    password = data.form.get('password')
+    password = data.get('password')
 
     pw_hasher = hashlib.sha256()
-    id_hasher = hashlib.sha256()
     pw_hasher.update((password + AppConfig.SECRET_KEY).encode('utf-8'))
-    id_hasher.update((username + AppConfig.SECRET_KEY).encode('utf-8'))
 
     if re.match('\d{13}', username):
         resp['STATUS'] = 400
@@ -50,7 +50,7 @@ def register_user():
         resp['STATUS'] = 200
         resp['MESSAGE'] = 'SUCCESS'
         resp['DATA'] = {
-            'task_id': register_email_code.delay(username)
+            'task_id': register_email_code.delay(username, username, pw_hasher.hexdigest())
         }
     else:
         resp['STATUS'] = 500
@@ -70,20 +70,23 @@ def register_code_check():
     task_id = data.get('task_id')
     msg_code = data.get('msg_code')
 
+    result = AsyncResult(task_id)
     resp = {
         'STATUS': None,
         'MESSAGE': '',
         'DATA': None
     }
-    if celery_redis.get(msg_code) == task_id:
-        resp['STATUS'] = 200
-        resp['MESSAGE'] = 'SUCCESS'
-    else:
-        resp['STATUS'] = 500
-        resp['MESSAGE'] = 'FAILED'
+    if not result.ready():
+        resp['STATUS'] = 400
+        resp['MESSAGE'] = 'code haven\'t yield yet.'
+        return jsonify(resp)
 
-    celery_redis.delete(task_id)
-    return jsonify(resp)
+    result = result.result
+    if msg_code != result.get('code'):
+        resp['STATUS'] = 500
+        resp['MESSAGE'] = 'code different'
+
+    user = User(user_id=uuid.UUID, )
 
 
 @master.route('/login', methods=['POST'])
@@ -100,7 +103,7 @@ def login():
     password = data.get('password') + AppConfig.SECRET_KEY
     _pw = sha256(password.encode('utf-8'))
 
-    res = db_session.query(User.passwordMD5).filter_by(
+    res = db_session.query(User.passwordMD5, User.user_id).filter(
         or_(User.phone_number == username, User.email_address == username)).first()
     resp = {
         'STATUS': None,
@@ -113,6 +116,8 @@ def login():
         return jsonify(resp)
     if _pw != res[0]:
         return
+    session['user_id'] = res[1]
+    session['username'] = username
     return redirect(url_for('page.index'))
 
 
@@ -123,7 +128,7 @@ def modify_nickname():
 
     :return:
     """
-    user_id = session.get('username')
+    user_id = session.get('user_id')
     data = request.json
 
 
@@ -134,7 +139,7 @@ def modify_password():
 
     :return:
     """
-    user_id = session.get('username')
+    user_id = session.get('user_id')
     data = request.json
     new_password = data.get('new_password')
     old_password = db_session.query(User.passwordMD5).filter_by(user_id=user_id).first()[0]
@@ -144,7 +149,7 @@ def modify_password():
 
     if new_password_hash == old_password:
         res = {
-            'STATUS': 0,
+            'STATUS': 500,
             'MESSAGE': 'new password is the same with the old password.',
             'DATA': None
         }
@@ -154,4 +159,4 @@ def modify_password():
 @master.route('/write_off_account', methods=['POST'])
 @session_checker
 def write_off_account():
-    pass
+    user_id = session.get('user_id')

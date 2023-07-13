@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request, session, redirect, current_app, render_template
+from flask import request, session, redirect, current_app, render_template, url_for
 from db.mysqlDB import db_session, ApiRequestCount, DeniedIP
 from sqlalchemy import text
 import os
@@ -16,10 +16,9 @@ def session_checker(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        _username = session.get('username')
-        _password = session.get('password')
-        if not _username or not _password:
-            return redirect('')
+        _user_id = session.get('user_id')
+        if _user_id is None:
+            return redirect(url_for('page.login'))
         result = func(*args, **kwargs)
         return result
 

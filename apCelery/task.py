@@ -1,9 +1,10 @@
+import json
 import random
 
 from .celery_app import celery_app
 import platform
 import subprocess
-from .smtp_tool import send_email
+from smtp_tool import send_email
 
 
 @celery_app.task
@@ -39,11 +40,17 @@ def mysql_executor():
 
 
 @celery_app.task
-def register_email_code(email_addr: str):
+def register_email_code(email_addr: str, username: str, password_hasher: str):
     _code = random.Random().choices(population=[str(x) for x in range(10)], k=6)
     text = f'register code: {"".join(_code)}'
     send_email(text, target=email_addr)
-    return _code
+    data = {
+        'code': _code,
+        'username': username,
+        'password': password_hasher,
+        'type': 'email'
+    }
+    return data
 
 
 @celery_app.task

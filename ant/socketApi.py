@@ -10,16 +10,15 @@ soc = SocketIO()
 
 @soc.on('connect')
 def socket_connect():
-
     if AppStatus.CONNECTED_USER < AppConfig.MAX_CONNECTION:
         AppStatus.CONNECTED_USER += 1
     else:
+        emit('message', 'please login')
         disconnect()
         return '', 200
 
     user_id = session.get('username')
     ip = request.headers.get('X-real-IP', request.remote_addr)
-    data = request.json
     if not user_id:
         disconnect()
         return '', 200
@@ -35,8 +34,8 @@ def socket_disconnect():
 
 
 @soc.on('message')
-def message(data):
-    soc.emit()
+def message(msg: str):
+    return msg, 200
 
 
 @soc.on('checkout_room')

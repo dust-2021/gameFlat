@@ -1,6 +1,7 @@
 from celery import Celery
-from .config import Config
 import pickle
+
+from apCelery.config import Config
 
 celery_app = Celery('apCelery', broker=Config.BROKER, backend=Config.BACKEND, include=Config.INCLUDE)
 celery_app.config_from_object(Config)
