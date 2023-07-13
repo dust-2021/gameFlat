@@ -1,10 +1,10 @@
 import json
 import random
 
-from .celery_app import celery_app
+from apCelery.celery_app import celery_app
 import platform
 import subprocess
-from smtp_tool import send_email
+from apCelery.smtp_tool import send_email
 
 
 @celery_app.task

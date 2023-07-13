@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import Column, VARCHAR, CHAR, INTEGER, FLOAT, DECIMAL, DATETIME, create_engine, BigInteger
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
@@ -64,14 +66,20 @@ def initial_db():
     _Base.metadata.create_all(_engine)
 
     # initial web admin user.
-    if not _db_session.query(User.user_id).filter_by(user_id=1).first():
+    if _db_session.query(User.user_id).filter_by(user_id=1).first() is None:
         pw = APP_ADMIN_PASSWORD + AppConfig.SECRET_KEY
         hasher = md5(pw.encode('utf-8'))
 
         admin = User(user_id=1, nickname='admin', passwordMD5=hasher.hexdigest())
         _db_session.add(admin)
         _db_session.commit()
-        _db_session.close()
+
+    if _db_session.query(UserPrivilege.user_id).filter_by(user_id=1).first() is None:
+        admin = UserPrivilege(user_id=1, privilege_level=10, granted_by='1', level_change_time=datetime.datetime.now())
+        _db_session.add(admin)
+        _db_session.commit()
+
+    _db_session.close()
     return _db_session
 
 
