@@ -1,11 +1,11 @@
 import logging
 from sqlalchemy import text
 from db.mysqlDB import db_session, DeniedIP, ApiRequestCount
-from etc.tools.wrapper import func_log_writer
+from etc.tools.wrapper import log_writer
 from etc.globalVar import AppConfig, AppStatus
 
 
-@func_log_writer
+@log_writer('funcLogger')
 def refresh_api_request_times():
     """
     clear all api request time-count table.
@@ -15,7 +15,8 @@ def refresh_api_request_times():
     db_session.commit()
     db_session.close()
 
-@func_log_writer
+
+@log_writer('funcLogger')
 def update_ip_denied():
     """
     turn down all ip denied level if level lt 10
@@ -26,6 +27,6 @@ def update_ip_denied():
     db_session.close()
 
 
-@func_log_writer
+@log_writer('funcLogger')
 def reload_nginx():
     pass

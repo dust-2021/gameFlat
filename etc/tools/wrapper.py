@@ -1,10 +1,11 @@
 from functools import wraps
 from flask import request, session, redirect, current_app, render_template, url_for
-from db.mysqlDB import db_session, ApiRequestCount, DeniedIP
+from db.mysqlDB import db_session, ApiRequestCount, DeniedIP, UserPrivilege
 from sqlalchemy import text
 import os
 import logging
 from etc.globalVar import AppConfig
+from typing import Callable
 
 
 def session_checker(func):
@@ -25,21 +26,23 @@ def session_checker(func):
     return wrapper
 
 
-def func_log_writer(func):
-    """
-    function execute log.
-    :param func:
-    :return:
-    """
+def log_writer(logger: str = 'root'):
+    def _func_log_writer(func):
+        """
+        function execute log.
+        :param func:
+        :return:
+        """
 
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        _log = logging.getLogger('funcLogger')
-        res = func(*args, **kwargs)
-        _log.info(f'{func.__name__} execute finished.')
-        return res
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            _log = logging.getLogger(logger)
+            res = func(*args, **kwargs)
+            _log.info(f'{func.__name__} execute finished.')
+            return res
 
-    return wrapper
+        return wrapper
+    return _func_log_writer
 
 
 def set_period_request_count(num: int = None):
@@ -89,3 +92,27 @@ def set_period_request_count(num: int = None):
         return wrapper
 
     return period_request_count
+
+
+def set_privilege_check(level: int):
+    """
+    check user's privilege level before request
+    :param level:
+    :return:
+    """
+    def privilege_check(func: Callable):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            user_id = session.get('user_id')
+            res = db_session.query(UserPrivilege.privilege_level).filter_by(user_id=user_id).first()
+
+            if res[0] < level:
+                return render_template('deny.html', msg='permission denied')
+
+            result = func(*args, **kwargs)
+
+            return result
+
+        return wrapper
+
+    return privilege_check

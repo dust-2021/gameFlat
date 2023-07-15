@@ -2,7 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
-from .config import Config
+from apCelery.config import Config
 
 
 def send_email(mail_text: str, target: str, mail_type: str = 'plain'):

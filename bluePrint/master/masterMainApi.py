@@ -10,7 +10,6 @@ from etc.tools.wrapper import set_period_request_count, session_checker
 from hashlib import sha256
 from apCelery.task import register_email_code, register_sms_code
 from celery.result import AsyncResult
-from db.redisConn import celery_redis
 
 master = Blueprint('master', __name__)
 
@@ -33,7 +32,7 @@ def register_user():
     username = data.get('username')
     res = db_session.query(User.passwordMD5).filter(
         or_(User.phone_number == username, User.email_address == username)).first()
-    if len(res) == 0:
+    if res is not None:
         resp['STATUS'] = 500
         resp['MESSAGE'] = 'account already exist'
         return jsonify(resp)
@@ -50,7 +49,7 @@ def register_user():
         resp['STATUS'] = 200
         resp['MESSAGE'] = 'SUCCESS'
         resp['DATA'] = {
-            'task_id': register_email_code.delay(username, username, pw_hasher.hexdigest())
+            'task_id': register_email_code.apply_async((username, username, pw_hasher.hexdigest()), expires=60).id
         }
     else:
         resp['STATUS'] = 500

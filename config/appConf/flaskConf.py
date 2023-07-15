@@ -59,8 +59,6 @@ SMTP_CONF = {
     'server_port': 25
 }
 
-os.environ['smtp_config'] = json.dumps(SMTP_CONF)
-
 SMS_CONF = {
 
 }

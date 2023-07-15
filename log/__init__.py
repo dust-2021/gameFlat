@@ -40,5 +40,14 @@ def logger_creator():
     handler.setLevel(logging.INFO)
     user_log.addHandler(handler)
 
+    # initialize user logger
+    user_log = logging.getLogger('celery')
+    user_log.setLevel(logging.INFO)
+    handler = TimedRotatingFileHandler(LOG_FILE + '/celery.log', when='D', interval=10)
+    fmt = logging.Formatter('%(name)s %(asctime)s: %(levelname)s -- %(message)s')
+    handler.setFormatter(fmt)
+    handler.setLevel(logging.INFO)
+    user_log.addHandler(handler)
+
 
 logger_creator()

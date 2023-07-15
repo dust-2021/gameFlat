@@ -1,3 +1,6 @@
+import logging
+import os
+
 from celery import Celery
 import pickle
 
