@@ -6,12 +6,12 @@ from etc.globalVar import AppConfig, AppStatus
 
 
 @log_writer('funcLogger')
-def refresh_api_request_times():
+def refresh_api_request_times(table_name: str = AppConfig.API_PROTECT_INFO_TABLE.get('minute')):
     """
     clear all api request time-count table.
     :return:
     """
-    db_session.execute(text(f'truncate table {ApiRequestCount.__tablename__}'))
+    db_session.execute(text(f'truncate table {table_name}'))
     db_session.commit()
     db_session.close()
 

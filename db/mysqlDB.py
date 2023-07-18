@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, VARCHAR, CHAR, INTEGER, FLOAT, DECIMAL, DATETIME, create_engine, BigInteger
+from sqlalchemy import Column, VARCHAR, CHAR, INTEGER, FLOAT, DECIMAL, DATETIME, create_engine, BigInteger, TEXT, BLOB
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 import os
@@ -16,6 +16,9 @@ _Base = declarative_base()
 
 
 class User(_Base):
+    """
+    user info
+    """
     __tablename__ = 'User'
 
     user_id = Column(BigInteger, index=True)
@@ -30,6 +33,9 @@ class User(_Base):
 
 
 class UserPrivilege(_Base):
+    """
+    user permission
+    """
     __tablename__ = 'UserPrivilege'
 
     user_id = Column(BigInteger, index=True)
@@ -40,7 +46,49 @@ class UserPrivilege(_Base):
 
 
 class ApiRequestCount(_Base):
-    __tablename__ = 'ApiRequestCount'
+    """
+    api requested count
+    """
+    __tablename__ = API_PROTECT_INFO_TABLE.get('minute')
+
+    user_id = Column(BigInteger, index=True, default=None)
+    ip_address = Column(CHAR(20))
+    api_route = Column(VARCHAR(256))
+    times = Column(INTEGER)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
+class ApiRequestCountHour(_Base):
+    """
+    api requested count
+    """
+    __tablename__ = API_PROTECT_INFO_TABLE.get('hour')
+
+    user_id = Column(BigInteger, index=True, default=None)
+    ip_address = Column(CHAR(20))
+    api_route = Column(VARCHAR(256))
+    times = Column(INTEGER)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
+class ApiRequestCountDay(_Base):
+    """
+    api requested count
+    """
+    __tablename__ = API_PROTECT_INFO_TABLE.get('day')
+
+    user_id = Column(BigInteger, index=True, default=None)
+    ip_address = Column(CHAR(20))
+    api_route = Column(VARCHAR(256))
+    times = Column(INTEGER)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
+class ApiRequestCountWeek(_Base):
+    """
+    api requested count
+    """
+    __tablename__ = API_PROTECT_INFO_TABLE.get('week')
 
     user_id = Column(BigInteger, index=True, default=None)
     ip_address = Column(CHAR(20))
@@ -50,10 +98,30 @@ class ApiRequestCount(_Base):
 
 
 class DeniedIP(_Base):
+    """
+    IP baned
+    """
     __tablename__ = 'DeniedIP'
 
     ip_address = Column(CHAR(20))
+    # level 1 - 10, if level is 10, the level will not auto decrease
     level = Column(INTEGER)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
+class SlaveMachine(_Base):
+    """
+
+    """
+    __tablename__ = 'SlaveMachine'
+
+    ip_address = Column(CHAR(20), index=True)
+    key = Column(BLOB())
+    # 1 slave with public IP, 2 without public IP.
+    machine_type = Column(INTEGER)
+    machine_name = Column(VARCHAR(32))
+    connect_status = Column(INTEGER)
+    add_time = Column(DATETIME)
     id = Column(BigInteger, autoincrement=True, primary_key=True)
 
 

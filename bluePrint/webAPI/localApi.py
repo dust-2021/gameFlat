@@ -1,7 +1,5 @@
-# encoding: utf-8
-"""
-@author: libo
-@file: localApi.py
-@time: 2023/7/18 17:11
-@desc:
-"""
+from flask import session, request, Blueprint
+from etc.globalVar import app_status
+
+local_api = Blueprint('local_api', __name__)
+

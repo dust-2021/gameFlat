@@ -38,21 +38,23 @@ def log_writer(logger: str = 'root'):
         def wrapper(*args, **kwargs):
             _log = logging.getLogger(logger)
             res = func(*args, **kwargs)
-            _log.info(f'{func.__name__} execute finished.')
+            _log.info(f'{func.__name__} execute finished, args: {args}, kwargs: {kwargs}')
             return res
 
         return wrapper
+
     return _func_log_writer
 
 
-def set_period_request_count(num: int = None):
+def set_period_request_count(num: int = None, period: str = 'minute'):
     """
     route get request times limit from a single ip address
     :param num: max times.
+    :param period: minute, hour, day, week
     :return:
     """
     if num is None:
-        num = AppConfig.API_MAX_REQUEST_TIME_PER_MINUTE
+        num = AppConfig.API_MAX_REQUEST_TIME_PER_MINUTE if period == 'minute' else 1
 
     def period_request_count(func):
         @wraps(func)
@@ -100,6 +102,7 @@ def set_privilege_check(level: int):
     :param level:
     :return:
     """
+
     def privilege_check(func: Callable):
         @wraps(func)
         def wrapper(*args, **kwargs):

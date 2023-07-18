@@ -5,10 +5,15 @@ import sys
 from typing import Mapping
 import log
 
+_log = logging.getLogger('celery')
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
+    _log.info('celery start with personal config')
     from config.appConf.flaskPersonalConf import *
 else:
+    _log.info('celery start with default config')
     from config.appConf.flaskConf import *
+
+del _log
 
 
 class Config:

@@ -4,18 +4,28 @@ import socketio
 
 sio = socketio.Client()
 
-@sio.event
-def connect():
+
+@sio.on('connect')
+def s_connect():
     print('connected')
 
-@sio.event
-def disconnected():
+
+@sio.on('disconnect')
+def s_disconnected():
     print('disconnect')
 
 
-if __name__ == '__main__':
-    sio.connect('http://localhost:5000', wait_timeout=3)
-    while True:
-        sio.emit('message', {'data': 'hello world'})
-        time.sleep(3)
+@sio.on('message')
+def s_message(msg):
+    print(f'received : {msg}')
 
+
+if __name__ == '__main__':
+    headers = {
+
+    }
+    sio.connect('http://localhost:5000', transports='websocket', namespaces=['/test'])
+    while True:
+        print('-')
+        sio.emit('message', {'data': 'hello world'}, namespace='/test', callback=s_message)
+        time.sleep(3)

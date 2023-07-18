@@ -35,4 +35,10 @@ _log.info('apscheduler start.')
 
 if AppConfig.API_PROTECT:
     aps.add_job(refresh_api_request_times, trigger='cron', minute='*', second='0', replace_existing=True)
+    aps.add_job(refresh_api_request_times, trigger='cron', minute='0', replace_existing=True,
+                args=(AppConfig.API_PROTECT_INFO_TABLE.get('hour'),))
+    aps.add_job(refresh_api_request_times, trigger='cron', hour='3', minute='0', replace_existing=True,
+                args=(AppConfig.API_PROTECT_INFO_TABLE.get('day'),))
+    aps.add_job(refresh_api_request_times, trigger='cron', week='2', hour='0', replace_existing=True,
+                args=(AppConfig.API_PROTECT_INFO_TABLE.get('week'),))
     aps.add_job(update_ip_denied, trigger='cron', day='*', hour='3', replace_existing=True)

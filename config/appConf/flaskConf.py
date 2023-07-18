@@ -23,7 +23,7 @@ LOGIN_FOR_SOCKETIO = False
 
 SESSION_TYPE = 'redis'
 SESSION_USE_SIGNER = True
-PERMANENT_SESSION_LIFETIME = 3600
+PERMANENT_SESSION_LIFETIME = 3600 * 24 * 7
 
 # LOG_LEVEL = 'INFO'
 LOG_FILE = 'log'
@@ -34,6 +34,12 @@ APP_ENV = 'development'
 # protect api route, set a default value to limit a api route can be requested by an IP in a minute.
 API_PROTECT = True
 API_MAX_REQUEST_TIME_PER_MINUTE = 30
+API_PROTECT_INFO_TABLE = {
+    'minute': 'ApiRequestCount',
+    'hour': 'ApiRequestCountHour',
+    'day': 'ApiRequestCountDay',
+    'week': 'ApiRequestCountWeek'
+}
 
 REDIS_CONFIG = {
     'host': '127.0.0.1',
@@ -55,7 +61,7 @@ if IS_THE_MASTER_MACHINE:
 SMTP_CONF = {
     'email': '',
     'password': '',
-    'server_host': '',
+    'server_host': 'smtp.163.com',
     'server_port': 25
 }
 

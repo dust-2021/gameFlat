@@ -6,6 +6,7 @@ import log
 
 from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
+from bluePrint.webAPI.localApi import local_api
 import os
 import logging
 from ant.socketApi import soc
@@ -42,6 +43,7 @@ def create_app() -> Flask:
     # register blueprint
     _app.register_blueprint(main_api, url_prefix='/api')
     _app.register_blueprint(page_app, url_prefix='/')
+    _app.register_blueprint(local_api, url_prefix='/local')
 
     # master machine config
     if _app.config.get('IS_THE_MASTER_MACHINE'):

@@ -1,3 +1,4 @@
+
 import hashlib
 import re
 import uuid
@@ -42,10 +43,10 @@ def register_user():
     pw_hasher = hashlib.sha256()
     pw_hasher.update((password + AppConfig.SECRET_KEY).encode('utf-8'))
 
-    if re.match('\d{13}', username):
+    if re.match('^\d{13}$', username):
         resp['STATUS'] = 400
         resp['MESSAGE'] = 'haven\'t configure phone sms server'
-    elif re.match('\w+@\w+\.com', username):
+    elif re.match('^\w+@\w+\.com$', username):
         resp['STATUS'] = 200
         resp['MESSAGE'] = 'SUCCESS'
         resp['DATA'] = {
@@ -61,6 +62,7 @@ def register_user():
 @set_period_request_count(5)
 def register_code_check():
     """
+    check the
     request json:
         {"task_id": string,"msg_code": string}
     :return:
@@ -77,7 +79,7 @@ def register_code_check():
     }
     if not result.ready():
         resp['STATUS'] = 400
-        resp['MESSAGE'] = 'code haven\'t yield yet.'
+        resp['MESSAGE'] = result.state
         return jsonify(resp)
 
     result = result.result
@@ -85,7 +87,22 @@ def register_code_check():
         resp['STATUS'] = 500
         resp['MESSAGE'] = 'code different'
 
-    user = User(user_id=uuid.UUID, )
+    user = None
+    if result.get('type') == 'email':
+        user = User(user_id=uuid.UUID, email_address=result.get('username'), passwordMD5=result.get('password'))
+    elif result.get('type') == 'phone':
+        user = User(user_id=uuid.UUID, phone_number=result.get('username'), passwordMD5=result.get('password'))
+    else:
+        resp['STATUS'] = 500
+        resp['MESSAGE'] = 'wrong type of register'
+        return jsonify(resp)
+    db_session.add(user)
+    db_session.commit()
+    db_session.close()
+
+    resp['STATUS'] = 200
+    resp['MESSAGE'] = f'{result.get("username")} register success.'
+    return jsonify(resp)
 
 
 @master.route('/login', methods=['POST'])
