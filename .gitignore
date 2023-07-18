@@ -1,5 +1,8 @@
 /venv
 /.idea
 /config/appConf/flaskPersonalConf.py
-/log/*.(?<!=\.py)$
-/info/*.(?<!=\.py)$
+/log/*
+/log/!*.py
+/info/*
+/info/!*.py
+

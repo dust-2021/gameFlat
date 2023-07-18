@@ -6,7 +6,9 @@ import os
 # ------------------
 # app load config from this file if there doesn't exist a named flaskPersonalConf.py
 # ------------------
-
+FLASK_PORT = 5000
+UDP_PORT = '5001-5020'
+UDP_PORT_COUNT = 5
 # if this arg is True,this app will be a master app, the data will store in
 # local databases. if this arg is False, the data will store in master-host app,
 # and this app can not work without master app.

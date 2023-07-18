@@ -6,6 +6,7 @@ db-2: apCelery result.
 db-3: mem cache.
 db-4: local socketio.
 db-5: master socketio.
+db-6: udp request sid.
 """
 import os
 from redis import Redis
@@ -23,3 +24,6 @@ socket_redis = Redis(host=REDIS_CONFIG.get('host', '127.0.0.1'), password=REDIS_
 
 celery_redis = Redis(host=REDIS_CONFIG.get('host', '127.0.0.1'), password=REDIS_CONFIG.get('password'),
                      port=REDIS_CONFIG.get('port'), db=2)
+
+udp_redis = Redis(host=REDIS_CONFIG.get('host', '127.0.0.1'), password=REDIS_CONFIG.get('password'),
+                  port=REDIS_CONFIG.get('port'), db=6)

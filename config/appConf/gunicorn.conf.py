@@ -1,11 +1,16 @@
 import multiprocessing
 import os
 
+if os.path.exists('config/appConf/flaskPersonalConf.py'):
+    from config.appConf.flaskPersonalConf import FLASK_PORT
+else:
+    from config.appConf.flaskConf import FLASK_PORT
+
 # workers = multiprocessing.cpu_count() * 2 - 1
 workers = 1
 threads = 1
 
-bind = '0.0.0.0:5000'
+bind = f'0.0.0.0:{FLASK_PORT}'
 worker_class = 'eventlet'
 worker_connections = 500
 loglevel = 'info'
