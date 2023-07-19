@@ -66,7 +66,7 @@ class UdpListener:
     def listen(self, port: int):
         """
         udp listener get a byte jsonify data.
-         {"user_id": int, "sid": str}
+         {"user_id": int, "sid": str, "target_user": int}
         :param port:
         :return:
         """
