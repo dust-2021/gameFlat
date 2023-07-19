@@ -45,6 +45,24 @@ class UserPrivilege(_Base):
     id = Column(BigInteger, autoincrement=True, primary_key=True)
 
 
+class UserBlackList(_Base):
+    """
+    black list for nat
+    """
+    __tablename__ = 'UserBlackList'
+
+    user_id = Column(BigInteger, index=True)
+    forbidden_by_user = Column(BigInteger, index=True)
+    forbid_user_privilege_level = Column(INTEGER)
+    forbidden_start_time = Column(DATETIME, default=datetime.datetime.now())
+    forbidden_end_time = Column(DATETIME, default=datetime.datetime.now() + datetime.timedelta(days=30))
+    forbidden_level = Column(INTEGER, comment='0 means global, 1 means single space, 2 means single person')
+    forbidden_global = Column(VARCHAR(16), default=None)
+    forbidden_space = Column(VARCHAR(32))
+    forbidden_person_user_id = Column(BigInteger)
+    id = Column(BigInteger, autoincrement=True, primary_key=True)
+
+
 class ApiRequestCount(_Base):
     """
     api requested count
@@ -143,7 +161,7 @@ def initial_db():
         _db_session.commit()
 
     if _db_session.query(UserPrivilege.user_id).filter_by(user_id=1).first() is None:
-        admin = UserPrivilege(user_id=1, privilege_level=10, granted_by='1', level_change_time=datetime.datetime.now())
+        admin = UserPrivilege(user_id=1, privilege_level=10, granted_by=1, level_change_time=datetime.datetime.now())
         _db_session.add(admin)
         _db_session.commit()
 

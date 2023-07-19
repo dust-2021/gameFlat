@@ -87,8 +87,8 @@ class UdpListener:
                     pass
                 time.sleep(1)
 
-        except socket.error:
-            _log.info(f'port: {port} listen failed.')
+        except socket.error as err:
+            _log.info(f'port: {port} listen failed: {err}')
             soc.close()
         finally:
             pass
