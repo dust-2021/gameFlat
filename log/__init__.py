@@ -40,7 +40,7 @@ def logger_creator():
     handler.setLevel(logging.INFO)
     user_log.addHandler(handler)
 
-    # initialize user logger
+    # initialize celery logger
     user_log = logging.getLogger('celery')
     user_log.setLevel(logging.INFO)
     handler = TimedRotatingFileHandler(LOG_FILE + '/celery.log', when='D', interval=10)

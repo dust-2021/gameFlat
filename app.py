@@ -10,6 +10,7 @@ from bluePrint.webAPI.localApi import local_api
 import os
 import logging
 from ant.socketApi import soc
+from ant.udp_socket import udp_listener
 
 
 def master_machine_init(_app: Flask):
@@ -45,6 +46,7 @@ def create_app() -> Flask:
     _app.register_blueprint(page_app, url_prefix='/')
     _app.register_blueprint(local_api, url_prefix='/local')
 
+    udp_listener.run()
     # master machine config
     if _app.config.get('IS_THE_MASTER_MACHINE'):
         master_machine_init(_app)
