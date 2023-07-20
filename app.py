@@ -9,7 +9,7 @@ from bluePrint.webAPI.page import page_app
 from bluePrint.webAPI.localApi import local_api
 import os
 import logging
-from ant.socketApi import soc
+from ant.socketConn import soc
 from ant.udp_socket import udp_listener
 
 

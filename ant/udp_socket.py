@@ -85,10 +85,9 @@ class UdpListener:
                 sid = data.get('sid')
                 if self.udp_sid_judge(user_id, sid):
                     pass
-                time.sleep(1)
 
         except socket.error as err:
-            _log.info(f'port: {port} listen failed: {err}')
+            _log.warning(f'port: {port} listen failed: {err}')
             soc.close()
         finally:
             pass

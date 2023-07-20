@@ -6,9 +6,13 @@ import os
 # ------------------
 # app load config from this file if there doesn't exist a named flaskPersonalConf.py
 # ------------------
+NGINX_LISTEN = 80
 FLASK_PORT = 5000
-UDP_PORT = '5001-5020'
+
+# udp port listen, at least 2 port, otherwise server can't check what kind of NAT the user is in.
 UDP_PORT_COUNT = 5
+# udp port range, 000 or '000' or '000,001,002' or '000-003'
+UDP_PORT = '5001-5020'
 # if this arg is True,this app will be a master app, the data will store in
 # local databases. if this arg is False, the data will store in master-host app,
 # and this app can not work without master app.

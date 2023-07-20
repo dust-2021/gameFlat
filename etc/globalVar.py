@@ -29,6 +29,8 @@ class AppConfig:
 
     MAX_CONNECTION: int = 500
 
+    NGINX_LISTEN = NGINX_LISTEN
+
 
 class AppStatus:
     """

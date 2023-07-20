@@ -75,9 +75,13 @@ def set_period_request_count(num: int = None, period: str = 'minute'):
                 return func(*args, **kwargs)
 
             elif times[0] >= num:
+                _log = logging.getLogger('user')
+                _log.warning(f'{_ip} forbidden level raise')
+
                 level = db_session.query(DeniedIP.level).filter_by(ip_address=_ip).first()
                 if level is None:
                     _mem = DeniedIP(ip_address=_ip, level=1)
+
                     db_session.add(_mem)
                     db_session.commit()
                 elif level[0] < 10:
