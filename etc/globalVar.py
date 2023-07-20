@@ -1,5 +1,6 @@
 import os
 import psutil
+from typing import Sequence, List
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import *
@@ -30,6 +31,8 @@ class AppConfig:
     MAX_CONNECTION: int = 500
 
     NGINX_LISTEN = NGINX_LISTEN
+
+    NAT_LISTENED_PORT: List[int] = []
 
 
 class AppStatus:

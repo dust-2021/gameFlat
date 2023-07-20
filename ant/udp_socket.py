@@ -10,6 +10,8 @@ from etc.tools.error_handler import AppError
 from db.redisConn import udp_redis
 import os
 import threading
+from etc.globalVar import AppConfig
+
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
     from config.appConf.flaskPersonalConf import UDP_PORT, UDP_PORT_COUNT
@@ -66,7 +68,7 @@ class UdpListener:
     def listen(self, port: int):
         """
         udp listener get a byte jsonify data.
-         {"user_id": int, "sid": str, "target_user": int}
+         {"from_user": int, "sid": str, "to_user": int}
         :param port:
         :return:
         """
@@ -78,6 +80,7 @@ class UdpListener:
             self.listened_count += 1
 
             _log.info(f'UDP listened port: {port}')
+            AppConfig.NAT_LISTENED_PORT.append(port)
             while True:
                 data = soc.recv(1024)
                 data = json.loads(data.decode())

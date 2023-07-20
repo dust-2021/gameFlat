@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask
 from flask_session import Session
 
 # this import will initial logger object.
@@ -7,6 +7,7 @@ import log
 from bluePrint.webAPI.mainApi import main_api
 from bluePrint.webAPI.page import page_app
 from bluePrint.webAPI.localApi import local_api
+from bluePrint.webAPI.natApi import nat_api
 import os
 import logging
 from ant.socketConn import soc
@@ -45,6 +46,7 @@ def create_app() -> Flask:
     _app.register_blueprint(main_api, url_prefix='/api')
     _app.register_blueprint(page_app, url_prefix='/')
     _app.register_blueprint(local_api, url_prefix='/local')
+    _app.register_blueprint(nat_api, url_prefix='/nat')
 
     udp_listener.run()
     # master machine config
