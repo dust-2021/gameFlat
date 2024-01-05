@@ -2,6 +2,7 @@ import json
 
 from redis import Redis
 import os
+from typing import Dict, Union, Any
 
 # ------------------
 # app load config from this file if there doesn't exist a named flaskPersonalConf.py
@@ -50,17 +51,20 @@ API_PROTECT_INFO_TABLE = {
 REDIS_CONFIG = {
     'host': '127.0.0.1',
     'port': 6379,
-    'password': None
+    'password': '064735'
 }
 # if this app is not the master app, mysql config won't use.
 MYSQL_CONF = {
     'host': '127.0.0.1',
     'port': 3306,
     'username': 'root',
-    'password': '',
+    'password': '064735Freedom?',
     'database': 'peer',
     'mysql_engine': 'pymysql'
 }
+
+AMQP_CONF: Union[Dict[str, Any], None] = None
+
 if IS_THE_MASTER_MACHINE:
     SESSION_REDIS = Redis(host=REDIS_CONFIG.get('host'), password=REDIS_CONFIG.get('password'))
 

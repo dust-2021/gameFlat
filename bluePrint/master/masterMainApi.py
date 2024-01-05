@@ -1,4 +1,3 @@
-
 import hashlib
 import re
 import uuid
@@ -9,7 +8,8 @@ from db.mysqlDB import User, db_session
 from etc.globalVar import AppConfig
 from etc.tools.wrapper import set_period_request_count, session_checker
 from hashlib import sha256
-from apCelery.task import register_email_code, register_sms_code
+from apCelery.task import register_email_code, register_sms_code, celery_checker
+from apCelery.celery_app import celery_app
 from celery.result import AsyncResult
 
 master = Blueprint('master', __name__)
@@ -176,3 +176,16 @@ def modify_password():
 @session_checker
 def write_off_account():
     user_id = session.get('user_id')
+
+
+@master.route('/celery_check', methods=['GET'])
+@set_period_request_count(5)
+def celery_message_check():
+    res = celery_checker.apply_async()
+    return jsonify({'code': 200, 'message': 'success', 'id': res.id})
+
+
+@master.route('/celery/result/<_id>', methods=['GET'])
+def get_celery_result(_id: str):
+    result = AsyncResult(_id, app=celery_app)
+    return jsonify(result.get())

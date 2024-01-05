@@ -1,7 +1,5 @@
 FROM python:3.9
-FROM nginx
 COPY . .
-RUN service nginx restart -c config/nginx.conf
-RUN pip install -r requirements/default.requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install -r requirements/default.requirements.txt
 EXPOSE 5000:5000
 CMD gunicorn -c config/appConf/gunicorn.conf.py app:app
