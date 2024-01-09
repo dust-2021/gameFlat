@@ -19,7 +19,7 @@ del _log
 class Config:
     BACKEND = f'redis://:{REDIS_CONFIG.get("password")}@{REDIS_CONFIG.get("host")}:{REDIS_CONFIG.get("port")}/2'
     # BROKER = f'redis://:{REDIS_CONFIG.get("password")}@{REDIS_CONFIG.get("host")}:{REDIS_CONFIG.get("port")}/1'
-    BROKER = 'amqp://guest:guest@127.0.0.1:5672/'
+    BROKER = 'amqp://guest:064735@127.0.0.1:5672/'
     INCLUDE = ['apCelery.task']
     TIME_ZOO = 'Asia/Shanghai'
 

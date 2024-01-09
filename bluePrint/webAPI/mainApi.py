@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, session, make_response
 from flask import request, jsonify
 import logging
 
@@ -20,6 +20,13 @@ def index():
     :return:
     """
     return 'this is api route'
+
+
+@main_api.route('/cookie/get', methods=['GET'])
+def get_cookie():
+    resp = make_response('set cookies')
+    resp.set_cookie('token', '123456')
+    return resp
 
 
 @main_api.route('/checkAlive')
@@ -56,4 +63,3 @@ def request_repeat():
     else:
         res['STATUS'] = 'FAILED'
     return jsonify(res)
-

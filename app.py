@@ -16,10 +16,12 @@ from ant.udp_socket import udp_listener
 
 def master_machine_init(_app: Flask):
     from bluePrint.master.masterMainApi import master
+    from bluePrint.master.testApi import test_bp
     from jobs.sche import aps
 
     aps.start()
     _app.register_blueprint(master, url_prefix='/master')
+    _app.register_blueprint(test_bp, url_prefix='/test')
     session = Session()
     session.init_app(_app)
 

@@ -5,4 +5,6 @@
 /log/!*.py
 /info/*
 /info/!*.py
+*__pycache__*
+*.pyc
 
