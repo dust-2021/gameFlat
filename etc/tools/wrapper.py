@@ -6,7 +6,8 @@ from sqlalchemy import text
 import os
 import logging
 from etc.globalVar import AppConfig
-from typing import Callable
+from typing import Callable, Dict, List, Mapping, Tuple, Any
+from logging import getLogger
 
 
 def session_checker(func):
@@ -124,3 +125,14 @@ def set_privilege_check(level: int):
         return wrapper
 
     return privilege_check
+
+
+class SingleClass(type):
+    singles: dict = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls.singles.get(cls) is None:
+            cls.singles[cls] = super().__call__(*args, **kwargs)
+            logger = getLogger('base')
+            logger.info(f'\'{cls.__name__}\' single object created')
+        return cls.singles[cls]

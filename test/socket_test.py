@@ -1,5 +1,6 @@
 import time
 
+import requests
 import socketio
 
 sio = socketio.Client()
@@ -24,8 +25,9 @@ if __name__ == '__main__':
     headers = {
 
     }
-    sio.connect('http://localhost:5000', transports='websocket', namespaces=['/test'])
+    # resp = requests.post('127.0.0.1:500/master/login')
+    sio.connect('http://localhost:5000', transports='websocket', namespaces=['/test', '/'])
     while True:
         print('-')
-        sio.emit('message', {'data': 'hello world'}, namespace='/test', callback=s_message)
+        sio.emit('message', {'data': 'hello world'}, callback=s_message)
         time.sleep(3)

@@ -11,6 +11,7 @@ from db.redisConn import udp_redis
 import os
 import threading
 from etc.globalVar import AppConfig
+from etc.tools.wrapper import SingleClass
 
 
 if os.path.exists('config/appConf/flaskPersonalConf.py'):
@@ -19,7 +20,7 @@ else:
     from config.appConf.flaskConf import UDP_PORT, UDP_PORT_COUNT
 
 
-class UdpListener:
+class UdpListener(metaclass=SingleClass):
     """
     create udp listen
     """
